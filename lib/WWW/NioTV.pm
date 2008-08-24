@@ -1,6 +1,6 @@
 package WWW::NioTV;
 use Moose;
-use version; our $VERSION = qv('0.01');
+use version; our $VERSION = qv('0.02');
 
 use WWW::Mechanize;
 use HTML::TableExtract;
@@ -23,7 +23,7 @@ WWW::NioTV - retrieve TV information from http://www.niotv.com/
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 

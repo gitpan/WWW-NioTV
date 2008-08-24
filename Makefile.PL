@@ -8,11 +8,13 @@ WriteMakefile
           'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/WWW/NioTV.pm',
           'PREREQ_PM' => {
-                           'Test::More' => 0,
-                           'HTML::SimpleLinkExtor' => 0,
-                           'WWW::Mechanize' => 0,
-                           'HTML::TableExtract' => 0,
-                           'List::MoreUtils' => 0
+                           'Test::More' => '0.8',
+                           'HTML::SimpleLinkExtor' => '1.19',
+                           'version' => '0.76',
+                           'WWW::Mechanize' => '1.34',
+                           'HTML::TableExtract' => '2.1',
+                           'List::MoreUtils' => '0.22',
+                           'Moose' => '0.54'
                          }
         )
 ;
