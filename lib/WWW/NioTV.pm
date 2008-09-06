@@ -1,12 +1,12 @@
 package WWW::NioTV;
 use Moose;
-use version; our $VERSION = qv('0.02');
+use version; our $VERSION = qv('0.03');
 
 use WWW::Mechanize;
 use HTML::TableExtract;
 use HTML::SimpleLinkExtor;
 use List::MoreUtils qw(any);
-#use Smart::Comments;
+use Smart::Comments;
 #use Data::TreeDumper;
 
 has 'content'  => ( is => 'rw', isa => 'Str'     );
@@ -15,7 +15,8 @@ has 'mech'     => ( is => 'rw', isa => 'Ref'     );
 
 my $url = 'http://www.niotv.com/i_index.php?cont=now';
 my $url_prefix = 'http://www.niotv.com/';
-my @ch_id = (40..50, 52, 53);
+my @ch_id = (46..50, 52, 53);
+#my @ch_id = (46..50, 52, 53, 55..57, 141);
 
 =head1 NAME
 
@@ -23,7 +24,7 @@ WWW::NioTV - retrieve TV information from http://www.niotv.com/
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
@@ -90,9 +91,13 @@ sub _find_link {
     $extor->parse($self->content);
 
     foreach my $link ($extor->links) {
-        return "$url_prefix$link" if $link =~ /$name/;
+        next unless any { $link =~ /ch_id=$_$/ } @ch_id;
+        ### $link
+        ### $name
+        return "$url_prefix$link" if $link =~ /epg_name=$name/;
     }
 
+    ### _find_link return
     return;
 }
 
@@ -126,9 +131,11 @@ sub _parse {
     my $mech = $self->mech;
     my %result;
     foreach my $channel (keys %{$self->schedule}) {
+        ### $channel
         my $name = (split /\s+/, $self->schedule->{$channel}->{$type})[0];
+        ### _find_link
         my $url  = $self->_find_link($name);
-        next unless any { $url =~ /ch_id=$_$/ } @ch_id;
+        ### _parse_unit
         my %data = $self->_parse_unit($url);
         $result{$channel} = \%data;
     }
@@ -139,10 +146,13 @@ sub _parse_unit {
     my $self = shift;
     my $url  = shift;
     my $mech = $self->mech;
+    ### get
     $mech->get($url);
 
+    ### parse start
     my $te = HTML::TableExtract->new;
     $te->parse($mech->content);
+    ### parse end
     my @tables = $te->tables;
     my $name    = $tables[1]->rows->[0]->[0];
     my $type    = $tables[1]->rows->[1]->[1];
