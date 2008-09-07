@@ -1,12 +1,12 @@
 package WWW::NioTV;
 use Moose;
-use version; our $VERSION = qv('0.03');
+use version; our $VERSION = qv('0.04');
 
 use WWW::Mechanize;
 use HTML::TableExtract;
 use HTML::SimpleLinkExtor;
 use List::MoreUtils qw(any);
-use Smart::Comments;
+#use Smart::Comments;
 #use Data::TreeDumper;
 
 has 'content'  => ( is => 'rw', isa => 'Str'     );
@@ -24,7 +24,7 @@ WWW::NioTV - retrieve TV information from http://www.niotv.com/
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
